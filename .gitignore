@@ -1,0 +1,3 @@
+/.build/
+!.gitignore
+/Dist-Zilla-Role-File-ChangeNotification-*
