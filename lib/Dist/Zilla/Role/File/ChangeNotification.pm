@@ -122,7 +122,7 @@ or even the value of a particular suitably-scoped variable.
 
 Once this method is called, every subsequent change to
 the file's content will result in your C<on_changed> sub being invoked against
-the file.  The new content is passed as the argument to the sub; The return
+the file.  The new content is passed as the argument to the sub; the return
 value is ignored.
 
 =head1 SUPPORT
