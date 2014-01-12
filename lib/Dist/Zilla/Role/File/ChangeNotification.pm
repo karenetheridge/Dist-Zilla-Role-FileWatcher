@@ -28,6 +28,7 @@ sub watch_file
 
     return if $self->_content_checksum;
 
+    # Storing a checksum initiates the "watch" process
     # this may not be the correct encoding, but things should work out okay
     # anyway - all we care about is deterministically getting bytes back
     $self->_content_checksum($self->__calculate_checksum);
@@ -47,6 +48,7 @@ around content => sub {
     # pass through if getter
     return $self->$orig if @_ < 1;
 
+    # store the new content
     my $content = shift;
     $self->$orig($content);
 
