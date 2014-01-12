@@ -29,8 +29,6 @@ sub watch_file
     return if $self->_content_checksum;
 
     # Storing a checksum initiates the "watch" process
-    # this may not be the correct encoding, but things should work out okay
-    # anyway - all we care about is deterministically getting bytes back
     $self->_content_checksum($self->__calculate_checksum);
     return;
 }
@@ -38,6 +36,8 @@ sub watch_file
 sub __calculate_checksum
 {
     my $self = shift;
+    # this may not be the correct encoding, but things should work out okay
+    # anyway - all we care about is deterministically getting bytes back
     md5_hex(encode_utf8($self->content))
 }
 
