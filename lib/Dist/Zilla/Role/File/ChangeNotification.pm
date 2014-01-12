@@ -53,16 +53,17 @@ around content => sub {
     my $old_checksum = $self->_content_checksum;
 
     # do nothing extra if we haven't got a checksum yet
-    # or if it didn't change
-    return $content if not $old_checksum
-                    or $old_checksum eq $self->__calculate_checksum;
+    return $content if not $old_checksum;
+
+    # ...or if the content hasn't actually changed
+    my $new_checksum = $self->__calculate_checksum;
+    return $content if $old_checksum eq $new_checksum;
+
+    # update the checksum to reflect the new content
+    $self->_content_checksum($new_checksum);
 
     # invoke the callback
     $self->has_changed($content);
-
-    # the content has potentially changed by the callback
-    # calculate new checksum
-    $self->_content_checksum( $self->__calculate_checksum );
 
     return $self->content;
 };
