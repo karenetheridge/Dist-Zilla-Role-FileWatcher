@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.002     2014-01-12 08:05:15Z
           - the checksum is updated (and therefore the callback is invoked)
             for every change to the content, not just (potentially) the first
             (thanks, Yanick!)

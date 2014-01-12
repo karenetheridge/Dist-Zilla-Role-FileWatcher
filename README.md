@@ -4,7 +4,7 @@ Dist::Zilla::Role::File::ChangeNotification - Receive notification when somethin
 
 # VERSION
 
-version 0.001
+version 0.002
 
 # SYNOPSIS
 
@@ -27,7 +27,7 @@ version 0.001
 
 # DESCRIPTION
 
-This is a role for [Dist::Zilla::Role::File](http://search.cpan.org/perldoc?Dist::Zilla::Role::File) objects which gives you a
+This is a role for [Dist::Zilla::Role::File](https://metacpan.org/pod/Dist::Zilla::Role::File) objects which gives you a
 mechanism for detecting and acting on files changing their content. This is
 useful if your plugin performs an action based on a file's content (perhaps
 copying that content to another file), and then later in the build process,
@@ -35,16 +35,25 @@ that source file's content is later modified.
 
 # ATTRIBUTES
 
-- `on_changed`: a sub which is invoked against the file when the file's
+## `on_changed`
+
+A method which is invoked against the file when the file's
 content has changed.  The new file content is passed as an argument.  If you
 need to do something in your plugin at this point, define the sub as a closure
-over your plugin object, as demonstrated in the ["SYNOPSIS"](#SYNOPSIS).
+over your plugin object, as demonstrated in the ["SYNOPSIS"](#synopsis).
+
+__Be careful__ of infinite loops, which can result if your sub changes the same
+file's content again! Add a mechanism to return without altering content if
+particular conditions are met (say that the needed content is already present,
+or even the value of a particular suitably-scoped variable.
 
 # METHODS
 
-- `watch_file` - Once this method is called, every subsequent change to
+## `watch_file`
+
+Once this method is called, every subsequent change to
 the file's content will result in your `on_changed` sub being invoked against
-the file.  The new content is passed as the argument to the sub; The return
+the file.  The new content is passed as the argument to the sub; the return
 value is ignored.
 
 # SUPPORT
@@ -55,8 +64,8 @@ I am also usually active on irc, as 'ether' at `irc.perl.org`.
 
 # SEE ALSO
 
-- [Dist::Zilla::File::OnDisk](http://search.cpan.org/perldoc?Dist::Zilla::File::OnDisk)
-- [Dist::Zilla::File::InMemory](http://search.cpan.org/perldoc?Dist::Zilla::File::InMemory)
+- [Dist::Zilla::File::OnDisk](https://metacpan.org/pod/Dist::Zilla::File::OnDisk)
+- [Dist::Zilla::File::InMemory](https://metacpan.org/pod/Dist::Zilla::File::InMemory)
 
 # AUTHOR
 
@@ -68,3 +77,7 @@ This software is copyright (c) 2013 by Karen Etheridge.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
+
+# CONTRIBUTOR
+
+Yanick Champoux <yanick@babyl.dyndns.org>
