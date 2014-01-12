@@ -49,6 +49,8 @@ around content => sub {
     return $self->$orig if @_ < 1;
 
     # store the new content
+    # XXX possible TODO: do not set the new content until after the callback
+    # is invoked. Talk to me if you care about this in either direction!
     my $content = shift;
     $self->$orig($content);
 

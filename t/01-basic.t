@@ -4,6 +4,7 @@ use warnings FATAL => 'all';
 use Test::More;
 use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Test::Fatal;
+use Test::Deep;
 use Test::DZil;
 use Path::Tiny;
 
@@ -25,6 +26,9 @@ use Dist::Zilla::Role::File::ChangeNotification;
         is => 'ro', isa => enum([qw(uc lc)]),
         required => 1,
     );
+
+    our @content;
+
     sub munge_files
     {
         my $self = shift;
@@ -42,7 +46,8 @@ use Dist::Zilla::Role::File::ChangeNotification;
         use_module('Dist::Zilla::Role::File::ChangeNotification')->meta->apply($file);
         my $plugin = $self;
         $file->on_changed(sub {
-            my $self = shift;
+            my ($self, $new_content) = @_;
+            push @content, $new_content;
             $plugin->log_fatal('someone tried to munge ' . $self->name
                 .' after we read from it. You need to adjust the load order of your plugins.');
         });
@@ -73,6 +78,33 @@ like(
     exception { $tzil->build },
     qr{someone tried to munge lib/Foo.pm after we read from it. You need to adjust the load order of your plugins},
     'detected attempt to change README after signature was created from it',
+);
+
+# ATTENTION! I still haven't decided whether the $file->content at the time of
+# the callback should be the old content or the new content . Most things won't
+# care, but if you have a stake in this fight, please talk to me and it will
+# be formalized!
+my ($file) = grep { $_->name eq 'lib/Foo.pm' } @{$tzil->files};
+is(
+    $file->content,
+    <<CODE,
+package Foo;
+# here is a comment!
+1
+CODE
+    'content of file when the build aborts is <...>'
+);
+
+cmp_deeply(
+    \@Dist::Zilla::Plugin::MyPlugin::content,
+    [
+        <<CODE,
+package Foo;
+# here is a comment!
+1
+CODE
+    ],
+    'callback is invoked with the correct arguments: the new content that cannot be set in the file',
 );
 
 done_testing;
