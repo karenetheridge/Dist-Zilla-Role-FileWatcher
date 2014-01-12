@@ -104,9 +104,9 @@ that source file's content is later modified.
 
 =head1 ATTRIBUTES
 
-=over 4
+=head2 C<on_changed>
 
-=item * C<on_changed>: a sub which is invoked against the file when the file's
+A sub which is invoked against the file when the file's
 content has changed.  The new file content is passed as an argument.  If you
 need to do something in your plugin at this point, define the sub as a closure
 over your plugin object, as demonstrated in the L</SYNOPSIS>.
@@ -116,18 +116,14 @@ file's content again! Add a mechanism to return without altering content if
 particular conditions are met (say that the needed content is already present,
 or even the value of a particular suitably-scoped variable.
 
-=back
-
 =head1 METHODS
 
-=over 4
+=head2 C<watch_file>
 
-=item * C<watch_file> - Once this method is called, every subsequent change to
+Once this method is called, every subsequent change to
 the file's content will result in your C<on_changed> sub being invoked against
 the file.  The new content is passed as the argument to the sub; The return
 value is ignored.
-
-=back
 
 =head1 SUPPORT
 
