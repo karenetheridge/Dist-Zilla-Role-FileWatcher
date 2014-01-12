@@ -50,12 +50,21 @@ around content => sub {
     my $content = shift;
     $self->$orig($content);
 
-    # do nothing extra if we haven't got a checksum yet
     my $old_checksum = $self->_content_checksum;
-    return $content if not $old_checksum;
 
-    $self->has_changed($content) if $self->__calculate_checksum ne $old_checksum;
-    return $content;
+    # do nothing extra if we haven't got a checksum yet
+    # or if it didn't change
+    return $content if not $old_checksum
+                    or $old_checksum eq $self->__calculate_checksum;
+
+    # invoke the callback
+    $self->has_changed($content);
+
+    # the content has potentially changed by the callback
+    # calculate new checksum
+    $self->_content_checksum( $self->__calculate_checksum );
+
+    return $self->content;
 };
 
 1;
