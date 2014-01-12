@@ -111,6 +111,11 @@ content has changed.  The new file content is passed as an argument.  If you
 need to do something in your plugin at this point, define the sub as a closure
 over your plugin object, as demonstrated in the L</SYNOPSIS>.
 
+B<Be careful> of infinite loops, which can result if your sub changes the same
+file's content again! Add a mechanism to return without altering content if
+particular conditions are met (say that the needed content is already present,
+or even the value of a particular suitably-scoped variable.
+
 =back
 
 =head1 METHODS
