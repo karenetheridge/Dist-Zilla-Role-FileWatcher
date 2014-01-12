@@ -18,7 +18,10 @@ has on_changed => (
     handles => { has_changed => 'execute_method' },
     lazy => 1,
     default => sub {
-        sub { die 'content of ', shift->name, ' has changed!' }
+        sub {
+            my ($file, $new_content) = @_;
+            die 'content of ', $file->name, ' has changed!';
+        }
     },
 );
 
@@ -108,7 +111,7 @@ that source file's content is later modified.
 
 =head2 C<on_changed>
 
-A sub which is invoked against the file when the file's
+A method which is invoked against the file when the file's
 content has changed.  The new file content is passed as an argument.  If you
 need to do something in your plugin at this point, define the sub as a closure
 over your plugin object, as demonstrated in the L</SYNOPSIS>.

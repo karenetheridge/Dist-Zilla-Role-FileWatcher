@@ -1,0 +1,67 @@
+use strict;
+use warnings FATAL => 'all';
+
+use Test::More;
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
+use Test::Fatal;
+use Test::DZil;
+use Path::Tiny;
+
+# we chdir before attempting to load the module, so we need to load it now or
+# our relative path in @INC will be for naught.
+use Dist::Zilla::Role::File::ChangeNotification;
+
+{
+    package Dist::Zilla::Plugin::MyPlugin;
+    use Moose;
+    use Module::Runtime 'use_module';
+    with 'Dist::Zilla::Role::FileGatherer', 'Dist::Zilla::Role::FileMunger';
+    has source_file => (
+        is => 'ro', isa => 'Str',
+        required => 1,
+    );
+    sub gather_files
+    {
+        my $self = shift;
+
+        require Dist::Zilla::File::InMemory;
+        my $file = Dist::Zilla::File::InMemory->new(
+            name => $self->source_file,
+            content => 'this data should never change!',
+        );
+        use_module('Dist::Zilla::Role::File::ChangeNotification')->meta->apply($file);
+        $file->watch_file;
+        $self->add_file($file);
+    }
+
+    sub munge_files
+    {
+        my $self = shift;
+
+        my ($file) = grep { $_->name eq $self->source_file } @{$self->zilla->files};
+
+        # try to alter the content after it is being watched
+        $file->content($file->content . ' ... but I will try to change it anyway');
+    }
+}
+
+my $tzil = Builder->from_config(
+    { dist_root => 't/does-not-exist' },
+    {
+        add_files => {
+            'source/dist.ini' => simple_ini(
+                [ GatherDir => ],
+                [ MyPlugin => { source_file => 'immutable.dat' } ],
+            ),
+            path(qw(source lib Foo.pm)) => "package Foo;\n1;\n",
+        },
+    },
+);
+
+like(
+    exception { $tzil->build },
+    qr{content of immutable\.dat has changed!},
+    'detected attempt to change file after signature was created from it',
+);
+
+done_testing;
