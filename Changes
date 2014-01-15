@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.003     2014-01-15 03:09:32Z
           - test fixed to work around a use of the file metaclass in older
             Dist::Zilla::Role::FileInjector
 
