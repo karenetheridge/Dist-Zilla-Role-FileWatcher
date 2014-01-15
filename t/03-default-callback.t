@@ -29,9 +29,12 @@ use Dist::Zilla::Role::File::ChangeNotification;
             name => $self->source_file,
             content => 'this data should never change!',
         );
+        # we add the file first because older Dist::Zilla manipulates the file
+        # object using the MOP in a way that will not work if there has been a role
+        # applied to the object's class
+        $self->add_file($file);
         use_module('Dist::Zilla::Role::File::ChangeNotification')->meta->apply($file);
         $file->watch_file;
-        $self->add_file($file);
     }
 
     sub munge_files

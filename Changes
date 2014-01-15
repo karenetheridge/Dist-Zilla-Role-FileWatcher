@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          - test fixed to work around a use of the file metaclass in older
+            Dist::Zilla::Role::FileInjector
 
 0.002     2014-01-12 08:05:15Z
           - the checksum is updated (and therefore the callback is invoked)
