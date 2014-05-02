@@ -3,7 +3,6 @@ use warnings FATAL => 'all';
 
 use Test::More;
 use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
-use Test::Fatal;
 use Test::DZil;
 use Path::Tiny;
 
@@ -15,7 +14,6 @@ use Dist::Zilla::Role::File::ChangeNotification;
     package Dist::Zilla::Plugin::Appender;
     use Moose;
     use Module::Runtime 'use_module';
-    use Moose::Util::TypeConstraints;
     with 'Dist::Zilla::Role::FileMunger';
 
     # appends an __END__ statement to all Foo files
