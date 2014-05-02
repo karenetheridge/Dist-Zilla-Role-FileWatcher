@@ -11,5 +11,5 @@ Revision history for {{$dist->name}}
             for every change to the content, not just (potentially) the first
             (thanks, Yanick!)
 
-0.001     2013-10-21 01:49:13Z (Karen Etheridge)
+0.001     2013-10-21 01:49:13Z
           - Initial release.
