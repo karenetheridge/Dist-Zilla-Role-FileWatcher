@@ -60,7 +60,7 @@ my $tzil = Builder->from_config(
     { dist_root => 't/does-not-exist' },
     {
         add_files => {
-            'source/dist.ini' => simple_ini(
+            path(qw(source dist.ini)) => simple_ini(
                 [ GatherDir => ],
                 [ MyPlugin => uc => { function => 'uc', source_file => 'lib/Foo.pm' } ],
                 [ MyPlugin => lc => { function => 'lc', source_file => 'lib/Foo.pm' } ],
