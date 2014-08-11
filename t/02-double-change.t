@@ -89,15 +89,16 @@ my $tzil = Builder->from_config(
     },
 );
 
+$tzil->chrome->logger->set_debug(1);
 $tzil->build;
-
-note 'log messages:';
-note '  ', $_ foreach @{ $tzil->log_messages };
 
 like(
     $tzil->slurp_file( 'build/lib/Foo.pm' ),
     qr'__END__',
     'MyPlugin1 has ensured that a footer is present in the finalized file',
 );
+
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
 
 done_testing;

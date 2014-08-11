@@ -74,6 +74,7 @@ CODE
     },
 );
 
+$tzil->chrome->logger->set_debug(1);
 like(
     exception { $tzil->build },
     qr{someone tried to munge lib/Foo.pm after we read from it. You need to adjust the load order of your plugins},
@@ -106,5 +107,8 @@ CODE
     ],
     'callback is invoked with the correct arguments: the new content that cannot be set in the file',
 );
+
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
 
 done_testing;

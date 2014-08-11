@@ -61,10 +61,14 @@ my $tzil = Builder->from_config(
     },
 );
 
+$tzil->chrome->logger->set_debug(1);
 like(
     exception { $tzil->build },
     qr{content of immutable\.dat has changed!},
     'detected attempt to change file after signature was created from it',
 );
+
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
 
 done_testing;
