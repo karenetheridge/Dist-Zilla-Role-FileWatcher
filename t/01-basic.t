@@ -78,7 +78,7 @@ $tzil->chrome->logger->set_debug(1);
 like(
     exception { $tzil->build },
     qr{someone tried to munge lib/Foo.pm after we read from it. You need to adjust the load order of your plugins},
-    'detected attempt to change README after signature was created from it',
+    'detected attempt to change file after signature was created from it',
 );
 
 # ATTENTION! I still haven't decided whether the $file->content at the time of
