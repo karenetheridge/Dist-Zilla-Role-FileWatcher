@@ -1,19 +1,23 @@
-# NAME
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
 
 Dist::Zilla::Role::File::ChangeNotification - Receive notification when something changes a file's contents
 
-# VERSION
+=head1 VERSION
 
-version 0.003
+version 0.004
 
-# SYNOPSIS
+=head1 SYNOPSIS
 
     package Dist::Zilla::Plugin::MyPlugin;
     sub some_phase
     {
         my $self = shift;
 
-        my ($source_file) = grep { $_->name eq $self->source } @{$self->zilla->files};
+        my ($source_file) = grep { $_->name eq 'some_name' } @{$self->zilla->files};
         # ... do something with this file ...
 
         Dist::Zilla::Role::File::ChangeNotification->meta->apply($source_file);
@@ -25,59 +29,83 @@ version 0.003
         $file->watch_file;
     }
 
-# DESCRIPTION
+=head1 DESCRIPTION
 
-This is a role for [Dist::Zilla::Role::File](https://metacpan.org/pod/Dist::Zilla::Role::File) objects which gives you a
+This is a role for L<Dist::Zilla::Role::File> objects which gives you a
 mechanism for detecting and acting on files changing their content. This is
 useful if your plugin performs an action based on a file's content (perhaps
 copying that content to another file), and then later in the build process,
 that source file's content is later modified.
 
-# ATTRIBUTES
+=head1 ATTRIBUTES
 
-## `on_changed`
+=head2 C<on_changed>
 
 A method which is invoked against the file when the file's
 content has changed.  The new file content is passed as an argument.  If you
 need to do something in your plugin at this point, define the sub as a closure
-over your plugin object, as demonstrated in the ["SYNOPSIS"](#synopsis).
+over your plugin object, as demonstrated in the L</SYNOPSIS>.
 
-__Be careful__ of infinite loops, which can result if your sub changes the same
+B<Be careful> of infinite loops, which can result if your sub changes the same
 file's content again! Add a mechanism to return without altering content if
 particular conditions are met (say that the needed content is already present,
 or even the value of a particular suitably-scoped variable.
 
-# METHODS
+=head1 METHODS
 
-## `watch_file`
+=head2 C<watch_file>
 
 Once this method is called, every subsequent change to
-the file's content will result in your `on_changed` sub being invoked against
+the file's content will result in your C<on_changed> sub being invoked against
 the file.  The new content is passed as the argument to the sub; the return
 value is ignored.
 
-# SUPPORT
+=head1 LIMITATIONS
 
-Bugs may be submitted through [the RT bug tracker](https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Role-File-ChangeNotification)
-(or [bug-Dist-Zilla-Role-File-ChangeNotification@rt.cpan.org](mailto:bug-Dist-Zilla-Role-File-ChangeNotification@rt.cpan.org)).
-I am also usually active on irc, as 'ether' at `irc.perl.org`.
+At the moment, a file can only be watched by one thing at a time. This may
+change in a future release, if a valid use case can be found.
 
-# SEE ALSO
+=head1 SUPPORT
 
-- [Dist::Zilla::File::OnDisk](https://metacpan.org/pod/Dist::Zilla::File::OnDisk)
-- [Dist::Zilla::File::InMemory](https://metacpan.org/pod/Dist::Zilla::File::InMemory)
+=for stopwords irc
 
-# AUTHOR
+Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Role-File-ChangeNotification>
+(or L<bug-Dist-Zilla-Role-File-ChangeNotification@rt.cpan.org|mailto:bug-Dist-Zilla-Role-File-ChangeNotification@rt.cpan.org>).
+I am also usually active on irc, as 'ether' at C<irc.perl.org>.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+L<Dist::Zilla::Role::FileWatcher> - in this distribution, for providing an interface for a plugin to watch a file
+
+=item *
+
+L<Dist::Zilla::File::OnDisk>
+
+=item *
+
+L<Dist::Zilla::File::InMemory>
+
+=back
+
+=head1 AUTHOR
 
 Karen Etheridge <ether@cpan.org>
 
-# COPYRIGHT AND LICENSE
+=head1 COPYRIGHT AND LICENSE
 
 This software is copyright (c) 2013 by Karen Etheridge.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
-# CONTRIBUTOR
+=head1 CONTRIBUTOR
+
+=for stopwords Yanick Champoux
 
 Yanick Champoux <yanick@babyl.dyndns.org>
+
+=cut
