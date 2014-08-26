@@ -25,6 +25,25 @@ sub watch_file
     $file->watch_file;
 }
 
+sub lock_file
+{
+    my ($self, $file, $message) = @_;
+
+    $file && $file->does('Dist::Zilla::Role::File')
+        or $self->log_fatal('lock_file was not passed a valid file object');
+
+    $message ||= 'someone tried to munge ' . $file->name
+        . ' after we read from it. You need to adjust the load order of your plugins!';
+
+    $self->watch_file(
+        $file,
+        sub {
+            my $me = shift;
+            $me->log_fatal($message);
+        },
+    );
+}
+
 1;
 __END__
 
@@ -42,6 +61,10 @@ __END__
 
         my (file) = grep { $_->name eq 'some_name' } @{$self->zilla->files};
         # ... do something with this file ...
+
+        $self->lock_file($file, 'KEEP OUT!');
+
+        # or:
 
         $self->watch_file(
             $file,
@@ -70,6 +93,11 @@ This method takes two arguments: the C<$file> object to watch, and a
 subroutine which is invoked when the file's contents change. It is called as a
 method on your plugin, and is passed one additional argument: the C<$file>
 object that changed.
+
+=head2 C<lock_file($file, $message?)>
+
+This method takes the C<$file> object to watch, and an optional message
+string; when the file is modified after it is locked, the build dies.
 
 =head1 SUPPORT
 
