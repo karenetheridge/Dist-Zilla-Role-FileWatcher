@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          - allow a file to be watched more than once
 
 0.004     2014-08-26 05:18:50Z
           - new role for plugins: Dist::Zilla::Role::FileWatcher, to

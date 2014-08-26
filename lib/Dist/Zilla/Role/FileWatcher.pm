@@ -16,14 +16,8 @@ sub watch_file
     $file->$_does('Dist::Zilla::Role::File')
         or $self->log_fatal('watch_file was not passed a valid file object');
 
-    if ($file->$_does('Dist::Zilla::Role::File::ChangeNotification'))
-    {
-        return if $file->has_on_changed;
-    }
-    else
-    {
-        Dist::Zilla::Role::File::ChangeNotification->meta->apply($file);
-    }
+    Dist::Zilla::Role::File::ChangeNotification->meta->apply($file)
+        if not $file->$_does('Dist::Zilla::Role::File::ChangeNotification');
 
     my $plugin = $self;
     $file->on_changed(sub {
@@ -107,11 +101,6 @@ object that changed.
 
 This method takes the C<$file> object to watch, and an optional message
 string; when the file is modified after it is locked, the build dies.
-
-=head1 LIMITATIONS
-
-At the moment, a file can only be watched by one thing at a time. This may
-change in a future release, if a valid use case can be found.
 
 =head1 SUPPORT
 

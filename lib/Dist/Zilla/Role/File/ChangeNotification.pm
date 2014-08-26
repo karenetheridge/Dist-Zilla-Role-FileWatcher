@@ -12,24 +12,30 @@ use namespace::autoclean;
 has _content_checksum => ( is => 'rw', isa => 'Str' );
 
 has on_changed => (
-    is => 'rw',
-    isa => 'CodeRef',
-    traits => ['Code'],
-    handles => { has_changed => 'execute_method' },
-    predicate => 'has_on_changed',
-    lazy => 1,
-    default => sub {
-        sub {
-            my ($file, $new_content) = @_;
-            die 'content of ', $file->name, ' has changed!';
-        }
+    isa => 'ArrayRef[CodeRef]',
+    traits => ['Array'],
+    handles => {
+        _add_on_changed => 'push',
+        _on_changed_subs => 'elements',
     },
+    lazy => 1,
+    default => sub { [] },
 );
+
+sub on_changed
+{
+    my ($self, $watch_sub) = @_;
+    $self->_add_on_changed($watch_sub || sub {
+        my ($file, $new_content) = @_;
+        die 'content of ', $file->name, ' has changed!';
+    });
+}
 
 sub watch_file
 {
     my $self = shift;
 
+    $self->on_changed if not $self->_on_changed_subs;
     return if $self->_content_checksum;
 
     # Storing a checksum initiates the "watch" process
@@ -71,10 +77,17 @@ around content => sub {
     $self->_content_checksum($new_checksum);
 
     # invoke the callback
-    $self->has_changed($content);
+    $self->_has_changed($content);
 
     return $self->content;
 };
+
+sub _has_changed
+{
+    my ($self, @args) = @_;
+
+    $self->$_(@args) for $self->_on_changed_subs;
+}
 
 1;
 __END__
@@ -108,11 +121,11 @@ useful if your plugin performs an action based on a file's content (perhaps
 copying that content to another file), and then later in the build process,
 that source file's content is later modified.
 
-=head1 ATTRIBUTES
+=head1 METHODS
 
-=head2 C<on_changed>
+=head2 C<on_changed($subref)>
 
-A method which is invoked against the file when the file's
+Provide a method to be invoked against the file when the file's
 content has changed.  The new file content is passed as an argument.  If you
 need to do something in your plugin at this point, define the sub as a closure
 over your plugin object, as demonstrated in the L</SYNOPSIS>.
@@ -130,11 +143,6 @@ Once this method is called, every subsequent change to
 the file's content will result in your C<on_changed> sub being invoked against
 the file.  The new content is passed as the argument to the sub; the return
 value is ignored.
-
-=head1 LIMITATIONS
-
-At the moment, a file can only be watched by one thing at a time. This may
-change in a future release, if a valid use case can be found.
 
 =head1 SUPPORT
 
