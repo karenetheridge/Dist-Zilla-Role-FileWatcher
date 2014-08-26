@@ -1,0 +1,89 @@
+use strict;
+use warnings;
+package Dist::Zilla::Role::FileWatcher;
+# ABSTRACT: Receive notification when something changes a file's contents
+# vim: set ts=8 sw=4 tw=78 et :
+
+use Moose::Role;
+use Module::Runtime 'use_module';
+use namespace::autoclean;
+
+sub watch_file
+{
+    my ($self, $file, $on_changed) = @_;
+
+    $file && $file->does('Dist::Zilla::Role::File')
+        or $self->log_fatal('watch_file was not passed a valid file object');
+
+    use_module('Dist::Zilla::Role::File::ChangeNotification')->meta->apply($file);
+    my $plugin = $self;
+    $file->on_changed(sub {
+        my $self = shift;
+        $plugin->$on_changed($self);
+    });
+
+    $file->watch_file;
+}
+
+1;
+__END__
+
+=pod
+
+=head1 SYNOPSIS
+
+    package Dist::Zilla::Plugin::MyPlugin;
+    use Moose;
+    with 'Dist::Zilla::Role::SomeRole', 'Dist::Zilla::Role::FileWatcher';
+
+    sub some_phase
+    {
+        my $self = shift;
+
+        my (file) = grep { $_->name eq 'some_name' } @{$self->zilla->files};
+        # ... do something with this file ...
+
+        $self->watch_file(
+            $file,
+            sub {
+                my ($plugin, $file) = @_;
+                ... do something with the file object ...
+            },
+        );
+    }
+
+=head1 DESCRIPTION
+
+This is a role for L<Dist::Zilla> plugins which gives you a mechanism for
+detecting and acting on files changing their content. This is useful if your
+plugin performs an action based on a file's content (perhaps copying that
+content to another file), and then later in the build process, that source
+file's content is later modified.
+
+=head1 METHODS
+
+This role adds the following methods to your plugin class:
+
+=head2 C<watch_file($file, $subref)>
+
+This method takes two arguments: the C<$file> object to watch, and a
+subroutine which is invoked when the file's contents change. It is called as a
+method on your plugin, and is passed one additional argument: the C<$file>
+object that changed.
+
+=head1 SUPPORT
+
+=for stopwords irc
+
+Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Role-File-ChangeNotification>
+(or L<bug-Dist-Zilla-Role-File-ChangeNotification@rt.cpan.org|mailto:bug-Dist-Zilla-Role-File-ChangeNotification@rt.cpan.org>).
+I am also usually active on irc, as 'ether' at C<irc.perl.org>.
+
+=head1 SEE ALSO
+
+=for :list
+* L<Dist::Zilla::Role::File::ChangeNotification> - in this distribution, the underlying implementation for watching the file
+* L<Dist::Zilla::File::OnDisk>
+* L<Dist::Zilla::File::InMemory>
+
+=cut

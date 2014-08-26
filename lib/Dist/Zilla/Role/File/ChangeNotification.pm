@@ -141,6 +141,7 @@ I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 =head1 SEE ALSO
 
 =for :list
+* L<Dist::Zilla::Role::FileWatcher> - in this distribution, for providing an interface for a plugin to watch a file
 * L<Dist::Zilla::File::OnDisk>
 * L<Dist::Zilla::File::InMemory>
 
