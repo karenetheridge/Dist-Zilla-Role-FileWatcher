@@ -5,6 +5,7 @@ package Dist::Zilla::Role::FileWatcher;
 # vim: set ts=8 sw=4 tw=78 et :
 
 use Moose::Role;
+use Safe::Isa;
 use Dist::Zilla::Role::File::ChangeNotification;
 use namespace::autoclean;
 
@@ -12,10 +13,10 @@ sub watch_file
 {
     my ($self, $file, $on_changed) = @_;
 
-    $file && $file->does('Dist::Zilla::Role::File')
+    $file->$_does('Dist::Zilla::Role::File')
         or $self->log_fatal('watch_file was not passed a valid file object');
 
-    if ($file->does('Dist::Zilla::Role::File::ChangeNotification'))
+    if ($file->$_does('Dist::Zilla::Role::File::ChangeNotification'))
     {
         return if $file->has_on_changed;
     }
@@ -37,7 +38,7 @@ sub lock_file
 {
     my ($self, $file, $message) = @_;
 
-    $file && $file->does('Dist::Zilla::Role::File')
+    $file->$_does('Dist::Zilla::Role::File')
         or $self->log_fatal('lock_file was not passed a valid file object');
 
     $message ||= 'someone tried to munge ' . $file->name
