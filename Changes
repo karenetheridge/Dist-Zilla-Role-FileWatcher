@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.005     2014-08-26 06:39:03Z
           - allow a file to be watched more than once
 
 0.004     2014-08-26 05:18:50Z
