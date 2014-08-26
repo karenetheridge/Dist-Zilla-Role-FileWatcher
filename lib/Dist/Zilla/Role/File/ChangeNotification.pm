@@ -16,6 +16,7 @@ has on_changed => (
     isa => 'CodeRef',
     traits => ['Code'],
     handles => { has_changed => 'execute_method' },
+    predicate => 'has_on_changed',
     lazy => 1,
     default => sub {
         sub {
@@ -129,6 +130,11 @@ Once this method is called, every subsequent change to
 the file's content will result in your C<on_changed> sub being invoked against
 the file.  The new content is passed as the argument to the sub; the return
 value is ignored.
+
+=head1 LIMITATIONS
+
+At the moment, a file can only be watched by one thing at a time. This may
+change in a future release, if a valid use case can be found.
 
 =head1 SUPPORT
 

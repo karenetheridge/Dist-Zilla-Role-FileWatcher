@@ -5,7 +5,7 @@ package Dist::Zilla::Role::FileWatcher;
 # vim: set ts=8 sw=4 tw=78 et :
 
 use Moose::Role;
-use Module::Runtime 'use_module';
+use Dist::Zilla::Role::File::ChangeNotification;
 use namespace::autoclean;
 
 sub watch_file
@@ -15,7 +15,15 @@ sub watch_file
     $file && $file->does('Dist::Zilla::Role::File')
         or $self->log_fatal('watch_file was not passed a valid file object');
 
-    use_module('Dist::Zilla::Role::File::ChangeNotification')->meta->apply($file);
+    if ($file->does('Dist::Zilla::Role::File::ChangeNotification'))
+    {
+        return if $file->has_on_changed;
+    }
+    else
+    {
+        Dist::Zilla::Role::File::ChangeNotification->meta->apply($file);
+    }
+
     my $plugin = $self;
     $file->on_changed(sub {
         my $self = shift;
@@ -98,6 +106,11 @@ object that changed.
 
 This method takes the C<$file> object to watch, and an optional message
 string; when the file is modified after it is locked, the build dies.
+
+=head1 LIMITATIONS
+
+At the moment, a file can only be watched by one thing at a time. This may
+change in a future release, if a valid use case can be found.
 
 =head1 SUPPORT
 
