@@ -4,6 +4,8 @@ package Dist::Zilla::Role::FileWatcher;
 # ABSTRACT: Receive notification when something changes a file's contents
 # vim: set ts=8 sw=4 tw=78 et :
 
+our $VERSION = '0.006';
+
 use Moose::Role;
 use Safe::Isa;
 use Dist::Zilla::Role::File::ChangeNotification;
