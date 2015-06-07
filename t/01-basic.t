@@ -16,7 +16,7 @@ use Dist::Zilla::Role::File::ChangeNotification;
     package Dist::Zilla::Plugin::MyPlugin;
     use Moose;
     use Module::Runtime 'use_module';
-    use Moose::Util::TypeConstraints;
+    use Moose::Util::TypeConstraints 'enum';
     with 'Dist::Zilla::Role::FileMunger';
     has source_file => (
         is => 'ro', isa => 'Str',
