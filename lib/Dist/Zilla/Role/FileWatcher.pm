@@ -5,7 +5,7 @@ package Dist::Zilla::Role::FileWatcher;
 # KEYWORDS: plugin build file change notify checksum watch monitor immutable lock
 # vim: set ts=8 sts=4 sw=4 tw=115 et :
 
-our $VERSION = '0.006';
+our $VERSION = '0.007';
 
 use Moose::Role;
 use Safe::Isa;
