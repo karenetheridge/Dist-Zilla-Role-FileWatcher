@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Role-FileWatcher
 
-{{$NEXT}}
+0.006     2015-06-27 21:52:29Z
           - log the FileWatcher's $VERSION in metadata for the plugin that
             consumes it
           - rename this distribution from
