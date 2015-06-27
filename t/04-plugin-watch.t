@@ -61,6 +61,7 @@ my $tzil = Builder->from_config(
         add_files => {
             path(qw(source dist.ini)) => simple_ini(
                 [ GatherDir => ],
+                [ MetaConfig => ],
                 [ FileCreator => ],
                 [ Graffiti => ],
             ),
@@ -106,6 +107,27 @@ CODE
     ],
     'callback is invoked just once, with the correct arguments',
 );
+
+cmp_deeply(
+    $tzil->distmeta,
+    superhashof({
+        x_Dist_Zilla => superhashof({
+            plugins => supersetof(
+                {
+                    class => 'Dist::Zilla::Plugin::FileCreator',
+                    config => {
+                        'Dist::Zilla::Role::FileWatcher' => {
+                            version => Dist::Zilla::Role::FileWatcher->VERSION,
+                        },
+                    },
+                    name => 'FileCreator',
+                    version => ignore,
+                },
+            ),
+        }),
+    }),
+    'distmeta includes the $VERSION for FileWatcher',
+) or diag 'got distmeta: ', explain $tzil->distmeta;
 
 diag 'got log messages: ', explain $tzil->log_messages
     if not Test::Builder->new->is_passing;

@@ -49,6 +49,18 @@ sub lock_file
     );
 }
 
+around dump_config => sub
+{
+    my ($orig, $self) = @_;
+    my $config = $self->$orig;
+
+    $config->{+__PACKAGE__} = {
+        version => __PACKAGE__->VERSION,
+    };
+
+    return $config;
+};
+
 1;
 __END__
 
