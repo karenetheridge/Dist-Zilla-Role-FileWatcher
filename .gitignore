@@ -4,3 +4,5 @@
 /.latest
 /Dist-Zilla-Role-File-ChangeNotification-*/
 /Dist-Zilla-Role-File-ChangeNotification-*.tar.gz
+/Dist-Zilla-Role-FileWatcher-*/
+/Dist-Zilla-Role-FileWatcher-*.tar.gz

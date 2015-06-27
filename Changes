@@ -1,8 +1,10 @@
-Revision history for Dist-Zilla-Role-File-ChangeNotification
+Revision history for Dist-Zilla-Role-FileWatcher
 
 {{$NEXT}}
           - log the FileWatcher's $VERSION in metadata for the plugin that
             consumes it
+          - rename this distribution from
+            Dist-Zilla-Role-File-ChangeNotification
 
 0.005     2014-08-26 06:39:03Z
           - allow a file to be watched more than once

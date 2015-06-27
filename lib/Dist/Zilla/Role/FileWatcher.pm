@@ -120,8 +120,8 @@ string; when the file is modified after it is locked, the build dies.
 
 =for stopwords irc
 
-Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Role-File-ChangeNotification>
-(or L<bug-Dist-Zilla-Role-File-ChangeNotification@rt.cpan.org|mailto:bug-Dist-Zilla-Role-File-ChangeNotification@rt.cpan.org>).
+Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Role-FileWatcher>
+(or L<bug-Dist-Zilla-Role-FileWatcher@rt.cpan.org|mailto:bug-Dist-Zilla-Role-FileWatcher@rt.cpan.org>).
 I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 
 =head1 SEE ALSO
