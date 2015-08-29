@@ -56,7 +56,7 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        version => __PACKAGE__->VERSION,
+        version => $VERSION,
     };
 
     return $config;
