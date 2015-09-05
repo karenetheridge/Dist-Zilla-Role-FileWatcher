@@ -146,14 +146,6 @@ the file's content will result in your C<on_changed> sub being invoked against
 the file.  The new content is passed as the argument to the sub; the return
 value is ignored.
 
-=head1 SUPPORT
-
-=for stopwords irc
-
-Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Role-FileWatcher>
-(or L<bug-Dist-Zilla-Role-FileWatcher@rt.cpan.org|mailto:bug-Dist-Zilla-Role-FileWatcher@rt.cpan.org>).
-I am also usually active on irc, as 'ether' at C<irc.perl.org>.
-
 =head1 SEE ALSO
 
 =for :list
