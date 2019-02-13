@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 package Dist::Zilla::Role::File::ChangeNotification;
-# ABSTRACT: Receive notification when something changes a file's contents
 # vim: set ts=8 sts=4 sw=4 tw=115 et :
+# ABSTRACT: Receive notification when something changes a file's contents
 
 our $VERSION = '0.007';
 
