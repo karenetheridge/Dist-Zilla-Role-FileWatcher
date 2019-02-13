@@ -103,7 +103,7 @@ __END__
     {
         my $self = shift;
 
-        my ($source_file) = grep { $_->name eq 'some_name' } @{$self->zilla->files};
+        my ($source_file) = grep $_->name eq 'some_name', @{$self->zilla->files};
         # ... do something with this file ...
 
         Dist::Zilla::Role::File::ChangeNotification->meta->apply($source_file);

@@ -33,7 +33,7 @@ use Dist::Zilla::Role::File::ChangeNotification;
     {
         my $self = shift;
 
-        my ($file) = grep { $_->name eq $self->source_file } @{$self->zilla->files};
+        my ($file) = grep $_->name eq $self->source_file, @{$self->zilla->files};
 
         # upper-case all the comments
         my $content = $file->content;
@@ -85,7 +85,7 @@ like(
 # the callback should be the old content or the new content . Most things won't
 # care, but if you have a stake in this fight, please talk to me and it will
 # be formalized!
-my ($file) = grep { $_->name eq 'lib/Foo.pm' } @{$tzil->files};
+my ($file) = grep $_->name eq 'lib/Foo.pm', @{$tzil->files};
 is(
     $file->content,
     <<CODE,

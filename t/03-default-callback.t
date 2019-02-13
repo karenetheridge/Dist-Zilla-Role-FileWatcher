@@ -41,7 +41,7 @@ use Dist::Zilla::Role::File::ChangeNotification;
     {
         my $self = shift;
 
-        my ($file) = grep { $_->name eq $self->source_file } @{$self->zilla->files};
+        my ($file) = grep $_->name eq $self->source_file, @{$self->zilla->files};
 
         # try to alter the content after it is being watched
         $file->content($file->content . ' ... but I will try to change it anyway');

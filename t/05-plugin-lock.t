@@ -42,7 +42,7 @@ use Dist::Zilla::Role::File::ChangeNotification;
     sub munge_files
     {
         my $self = shift;
-        my ($file) = grep { $_->name eq 'lib/Foo.pm' } @{$self->zilla->files};
+        my ($file) = grep $_->name eq 'lib/Foo.pm', @{$self->zilla->files};
         ::note('munging file: ' . $file->name);
         $file->content($file->content . "# Hello etheR WuZ HeRe\n");
     }

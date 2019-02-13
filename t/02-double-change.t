@@ -21,7 +21,7 @@ use Dist::Zilla::Role::File::ChangeNotification;
     {
         my $self = shift;
 
-        my ($file) = grep { $_->name =~ /Foo/ } @{$self->zilla->files};
+        my ($file) = grep $_->name =~ /Foo/, @{$self->zilla->files};
         use_module('Dist::Zilla::Role::File::ChangeNotification')->meta->apply($file);
 
         $self->log('watching content of ' . $file->name);
@@ -51,7 +51,7 @@ use Dist::Zilla::Role::File::ChangeNotification;
     sub munge_files {
         my $self = shift;
 
-        my ($file) = grep { $_->name =~ /Foo/ } @{$self->zilla->files};
+        my ($file) = grep $_->name =~ /Foo/, @{$self->zilla->files};
 
         $self->log('munging content of ' . $file->name);
         $file->content( 'package Foo; 2;' );
@@ -67,7 +67,7 @@ use Dist::Zilla::Role::File::ChangeNotification;
     sub munge_files {
         my $self = shift;
 
-        my ($file) = grep { $_->name =~ /Foo/ } @{$self->zilla->files};
+        my ($file) = grep $_->name =~ /Foo/, @{$self->zilla->files};
 
         $self->log('munging content of ' . $file->name);
         $file->content( 'package Foo; 1;' );

@@ -77,7 +77,7 @@ __END__
     {
         my $self = shift;
 
-        my (file) = grep { $_->name eq 'some_name' } @{$self->zilla->files};
+        my (file) = grep $_->name eq 'some_name', @{$self->zilla->files};
         # ... do something with this file ...
 
         $self->lock_file($file, 'KEEP OUT!');
